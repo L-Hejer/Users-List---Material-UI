@@ -8,10 +8,10 @@ const {
 const User = require('../../models/User');
 // const Picture = require('../../models/Picture');
 
-//@Route    POST api/user
+//@Route    POST api/user/adduser
 //@desc     Add User
 //@access   Public
-Router.post('/register', validateAddUser(), validate, async (req, res) => {
+Router.post('/adduser', validateAddUser(), validate, async (req, res) => {
   const { name, surName, birthYear, birthPlace } = req.body;
   try {
     const newUser = new User({ name, surName, birthYear, birthPlace });

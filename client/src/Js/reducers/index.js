@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import userReducer from './userReducer';
+import galleryReducer from './galleryReducer';
 
 export default combineReducers({
-  user: userReducer
+  users: userReducer,
+  photos: galleryReducer
 });

@@ -1,14 +1,11 @@
 import {
   USER_LOADING,
-  LOADING_FAIL,
-  ADD_USER,
-  EDIT_USER,
-  DELETE_USER
+  GET_USERS
 } from '../const/actionTypes';
 
 const initialState = {
   isLoading: false,
-  user: { name: '', surName: '', birthYear: '', birthPlace: '' }
+  users: []
 };
 
 export default function(state = initialState, action) {
@@ -17,13 +14,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isLoading: true,
-        user: action.payload
       };
-    case LOADING_FAIL:
+    case GET_USERS:
       return {
         ...state,
         isLoading:false,
-        user: null
+        users: action.payload
       };
     default:
       return state;
