@@ -1,9 +1,19 @@
 import React from 'react';
+import { useDispatch , useSelector, shallowEqual} from 'react-redux';
 
-import {addPhoto, deletePhoto} from '../../Js/actions/galleryActions';
+import { addPhoto, deletePhoto } from '../../Js/actions/galleryActions';
 
 import { fade, makeStyles } from '@material-ui/core/styles';
-import {Card, CardActionArea, CardActions, CardContent, CardMedia, Button, Typography, InputBase, } from '@material-ui/core';
+import {
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Button,
+  Typography,
+  InputBase
+} from '@material-ui/core';
 
 import SearchIcon from '@material-ui/icons/Search';
 import AddBoxIcon from '@material-ui/icons/AddBox';
@@ -76,6 +86,13 @@ const useStyles = makeStyles(theme => ({
 
 function UserPhotos() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const photos = useSelector(
+    state => ({
+      photos: state.photos.photos,
+    }),
+    shallowEqual
+  );
 
   return (
     <div>
@@ -106,29 +123,32 @@ function UserPhotos() {
           <div>
             <Button>
               {' '}
-              <AddBoxIcon />
+              <AddBoxIcon onClick={() => dispatch(addPhoto())} />
             </Button>
           </div>
         </div>
       </div>
-      <Card className={classes.root}>
+      <Card 
+      className={classes.root}
+      photos={photos}
+      >
         <CardActionArea>
           <CardMedia
             className={classes.media}
-            image='https://source.unsplash.com/2ShvY8Lf6l0/800x599'
+            image={photos.link}
             title='Contemplative Reptile'
           />
           <CardContent className={classes.cardInfos}>
             <Typography gutterBottom variant='h5' component='h2'>
-              Picture 1
+              {photos.title}
             </Typography>
             <CardActions>
-              <Button>
+              {/* <Button>
                 <VisibilityIcon className={classes.icon} />
-              </Button>
-              <Button>
+              </Button> */}
+              {/* <Button>
                 <DeleteIcon className={classes.icon} />
-              </Button>
+              </Button> */}
             </CardActions>
           </CardContent>
         </CardActionArea>

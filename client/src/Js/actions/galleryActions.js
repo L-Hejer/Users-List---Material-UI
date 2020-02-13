@@ -16,7 +16,7 @@ export const setPhotosLoading = () => {
   export const getPhotos = () => dispatch => {
 dispatch(setPhotosLoading());
 axios
-.get('/api/picture')
+.get('/')
 .then(res => dispatch({
     type: GET_PHOTOS,
     payload: res.data

@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-// import axios from 'axios';
+import React from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import {
   loadUser,
@@ -8,13 +7,19 @@ import {
   deleteUser
 } from '../../Js/actions/usersActions';
 
+import { makeStyles } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
 
-import ImageIcon from '@material-ui/icons/Image';
-import { Button } from '@material-ui/core';
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    height: '100%',
+    margin: 20
+  },
+}))
 
 function UsersList() {
+  const classes = useStyles();
   const { data, columns, isLoading } = useSelector(
     state => ({
       data: state.users.users,
@@ -25,7 +30,7 @@ function UsersList() {
         {
           title: 'Birth Place',
           field: 'birthPlace',
-          lookup: { 1: 'Tunis', 2: 'Ariana', 3: 'Ben Arous' }
+          type: 'text',
         }
       ],
       isLoading : state.users.isLoading,
@@ -36,7 +41,7 @@ function UsersList() {
   const dispatch = useDispatch();
 
   return (
-    <div className='users-list'>
+    <div className={classes.root}>
       <MaterialTable
         title='Users List'
         columns={columns}
@@ -71,18 +76,21 @@ function UsersList() {
               // }, 600);
             }),
 
-      
         }}
+
         //REDIRECT TO USER GALLERY
         actions={[
           {
             icon: 'image',
-            tooltip: 'Show User Gallery',
-            onClick: (event, rowData) => {
-              // Do save operation
-            }
+            tooltip: 'Redirect to User Gallery',
+             onClick: (event, rowData) => window.location.href= `/${rowData._id}` 
           }
         ]}
+
+        //ACTIONS DISPLAY
+        options={{
+          actionsColumnIndex: -1
+        }}
       />
    
     </div>
