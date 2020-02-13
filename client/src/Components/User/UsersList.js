@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-
+import React, { useEffect } from 'react';
+// import axios from 'axios';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import {
   loadUser,
   addUser,
@@ -10,107 +10,83 @@ import {
 
 import MaterialTable from 'material-table';
 
-// import AddBoxIcon from '@material-ui/icons/AddBox';
-// import ImageIcon from '@material-ui/icons/Image';
-// import EditIcon from '@material-ui/icons/Edit';
-// import DeleteIcon from '@material-ui/icons/Delete';
+import ImageIcon from '@material-ui/icons/Image';
+import { Button } from '@material-ui/core';
 
-class UsersList extends Component {
-  state = {
-    // name:'',
-    // surName:'',
-    // birthYear:'',
-    // birthPlace:'',
-    columns: [
-      { title: 'Name', field: 'name' },
-      { title: 'Surname', field: 'surName' },
-      { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-      {
-        title: 'Birth Place',
-        field: 'birthPlace',
-        lookup: { 1: 'Tunis', 2: 'Ariana', 3: 'Ben Arous' }
-      },
-      { title: 'Actions' }
-    ],
-    users: []
-  };
 
-  componentDidMount = () => {
-    this.setState({ users: loadUser() });
-    console.log(this.props.users.users);
-  };
+function UsersList() {
+  const { data, columns, isLoading } = useSelector(
+    state => ({
+      data: state.users.users,
+      columns: [
+        { title: 'Name', field: 'name' },
+        { title: 'Surname', field: 'surName' },
+        { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
+        {
+          title: 'Birth Place',
+          field: 'birthPlace',
+          lookup: { 1: 'Tunis', 2: 'Ariana', 3: 'Ben Arous' }
+        }
+      ],
+      isLoading : state.users.isLoading,
+    }),
+    shallowEqual
+  );
 
-  render() {
-    const users =
-      this.props.users && this.props.users.users ? this.props.users.users : [];
-    return (
-      <div className='users-list'>
-        <MaterialTable
-          title='Users List'
-          columns={this.state.columns}
-          users={users}
-          editable={{
-            //ADD USER
-            onRowAdd: newUser => {
-              this.props.addUser(newUser);
-              new Promise(resolve => {
-                setTimeout(() => {
-                  resolve();
-                  this.setState(() => {
-                    const users = [...users];
-                    users.push(newUser);
-                    return { users };
-                  });
-                }, 600);
-              });
+  const dispatch = useDispatch();
+
+  return (
+    <div className='users-list'>
+      <MaterialTable
+        title='Users List'
+        columns={columns}
+        data={data}
+        isLoading={isLoading}
+        editable={{
+          //ADD USER
+          onRowAdd: newData =>
+            new Promise(resolve => {
+              setTimeout(() => {
+                resolve();
+                dispatch(addUser(newData));
+              }, 600);
+            }),
+
+          //EDIT USER
+          onRowUpdate: (newData, oldData) =>
+            new Promise(resolve => {
+              // setTimeout(() => {
+                resolve();
+                console.log(oldData);
+                dispatch(editUser(oldData._id, newData));
+              // }, 300);
+            }),
+
+          //DELETE USER
+          onRowDelete: oldData =>
+            new Promise(resolve => {
+              // setTimeout(() => {
+                resolve();
+                dispatch(deleteUser(oldData._id))
+              // }, 600);
+            }),
+
+      
+        }}
+        //REDIRECT TO USER GALLERY
+        actions={[
+          {
+            icon: 'image',
+            tooltip: 'Show User Gallery',
+            onClick: (event, rowData) => {
+              // Do save operation
             }
-
-            //EDIT USER
-
-            // onRowUpdate: (newData, oldData) =>
-            //   new Promise(resolve => {
-            //     setTimeout(() => {
-            //       resolve();
-            //       if (oldData) {
-            //         setState(prevState => {
-            //           const data = [...prevState.data];
-            //           data[data.indexOf(oldData)] = newData;
-            //           return { ...prevState, data };
-            //         });
-            //       }
-            //     }, 600);
-            //   }),
-
-            //DELETE USER
-
-            // onRowDelete: oldData =>
-            //   new Promise(resolve => {
-            //     setTimeout(() => {
-            //       resolve();
-            //       setState(prevState => {
-            //         const data = [...prevState.data];
-            //         data.splice(data.indexOf(oldData), 1);
-            //         return { ...prevState, data };
-            //       });
-            //     }, 600);
-            //   })
-          }}
-        />
-        {/* <ImageIcon/>
-    <EditIcon/>
-    <DeleteIcon/> */}
-      </div>
-    );
-  }
+          }
+        ]}
+      />
+   
+    </div>
+  );
 }
 
-const mapStateToProps = state => ({
-  users: state.users
-});
-
-export default connect(mapStateToProps, {
-  loadUser,
-  addUser,
-  editUser,
-  deleteUser
-})(UsersList);
+export default UsersList;

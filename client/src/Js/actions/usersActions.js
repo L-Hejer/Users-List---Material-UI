@@ -13,7 +13,7 @@ export const setUsersLoading = () => {
 };
 
 //Get Users
-export const loadUser = () => async dispatch => {
+export const loadUser = () => dispatch => {
   dispatch(setUsersLoading());
   axios
     .get('/api/user')
@@ -56,12 +56,14 @@ export const addUser = ({
 
 //Edit User
 export const editUser = (id, editedUser) => dispatch => {
+  dispatch(setUsersLoading());
   axios.put(`/api/user/${id}`, editedUser)
   .then(res => dispatch(loadUser()));
 };
 
 //Delete User
 export const deleteUser = id => async dispatch => {
+  dispatch(setUsersLoading());
   try {
     await axios.delete(`/api/user/${id}`);
     dispatch(loadUser());

@@ -1,21 +1,12 @@
 import React from 'react';
-// import {connect} from 'react-redux';
 
 import {addPhoto, deletePhoto} from '../../Js/actions/galleryActions';
 
 import { fade, makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import {Card, CardActionArea, CardActions, CardContent, CardMedia, Button, Typography, InputBase, } from '@material-ui/core';
 
-import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
 
